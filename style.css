@@ -1,0 +1,129 @@
+/* ==========================================================
+   Design tokens — change these to restyle the whole site
+   ========================================================== */
+:root {
+  --bg: #0a0a0a;
+  --ink: #f2f2f0;
+  --ink-dim: #8f8f8a;
+  --accent: #d6ff3f;
+  --line: #232320;
+  --card-bg: #111110;
+
+  --font-display: "Anton", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --gutter: clamp(24px, 6vw, 96px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Respect users who've asked for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.page {
+  min-height: 100svh;
+  padding: clamp(48px, 9vh, 120px) var(--gutter) clamp(40px, 8vh, 96px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: clamp(2.75rem, 8vw, 6rem);
+  line-height: 1;
+  color: var(--accent);
+  margin: 0 0 clamp(48px, 9vh, 96px);
+  text-align: center;
+}
+
+.gallery {
+  width: 100%;
+  max-width: 960px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3vw, 32px);
+  margin-bottom: clamp(56px, 10vh, 120px);
+}
+
+.card {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+}
+
+.caption {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink-dim);
+  max-width: 34ch;
+}
+
+.caption strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.cta {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.cta:hover {
+  border-color: var(--accent);
+}
+
+.cta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* ==========================================================
+   Mobile — stack the two photos instead of side by side
+   ========================================================== */
+@media (max-width: 640px) {
+  .gallery {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+  }
+}
