@@ -3,17 +3,15 @@
    ========================================================== */
 :root {
   --bg: #0a0a0a;
-  --bg-soft: #121210;
   --ink: #f5f5f2;
   --ink-dim: #94948c;
   --accent: #d6ff3f;
   --accent-ink: #0a0a0a;
   --line: #262622;
   --card-bg: #141412;
-  --radius: 14px;
   --radius-sm: 999px;
 
-  --font-display: "Inter", sans-serif;
+  --font-display: "Iosevka Charon", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --gutter: clamp(20px, 5vw, 80px);
@@ -34,14 +32,12 @@ html {
 
 body {
   margin: 0;
-  background:
-    radial-gradient(120% 90% at 50% -10%, #1a1a15 0%, var(--bg) 55%);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-mono);
   -webkit-font-smoothing: antialiased;
 }
 
-/* Respect users who've asked for reduced motion */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -49,10 +45,6 @@ body {
   }
 }
 
-/* ==========================================================
-   Page shell — three fixed regions (hero / gallery / cta),
-   locked to the viewport height, nothing here ever scrolls.
-   ========================================================== */
 .page {
   height: 100dvh;
   height: 100svh;
@@ -75,106 +67,88 @@ body {
 
 .name {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: -0.01em;
-  font-size: clamp(2rem, 8.5vh, 5.25rem);
-  line-height: 0.98;
-  color: var(--accent);
+  letter-spacing: 0.01em;
+  font-size: clamp(2rem, 8.5vh, 5.5rem);
+  line-height: 1;
+  color: var(--ink);
   margin: 0;
 }
 
-.tagline {
+.subtitle {
   margin: 0;
-  font-size: clamp(0.7rem, 1.6vh, 0.9rem);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-dim);
-}
-
-.bio {
-  margin: 0;
-  max-width: min(90vw, 640px);
-  font-size: clamp(0.75rem, 1.7vh, 0.95rem);
+  max-width: min(94vw, 760px);
+  font-family: "Iosevka Charon Mono", monospace;
+  font-size: clamp(0.65rem, 1.4vh, 0.85rem);
   line-height: 1.5;
-  color: var(--ink-dim);
+  color: var(--ink);
+  opacity: 0.85;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; /* keeps it to one line — long bios truncate with "…" */
+  text-overflow: ellipsis; /* keeps it to one line — truncates with "…" if the screen is too narrow */
 }
 
-.bio strong {
-  color: var(--ink);
-  font-weight: 700;
-}
-
-/* ==========================================================
-   Gallery — rounded photo frames. Images never crop: they sit
-   centered inside a fixed frame (object-fit: contain), so a
-   non-square photo shows letterbox space instead of losing
-   part of the image. Upload a square photo for zero gaps.
-   ========================================================== */
 .gallery {
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 0 0 auto;
+  height: clamp(300px, 56vh, 620px);
   width: 100%;
-  max-width: 960px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
   gap: clamp(14px, 2.5vw, 32px);
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .card {
   margin: 0;
-  min-height: 0;
-  min-width: 0; /* lets grid children shrink instead of stretching the column to fit content */
-  display: flex;
+  flex: 0 0 auto;
+  height: 100%;
 }
 
 .frame {
-  flex: 1 1 auto;
-  min-height: 0;
-  border-radius: var(--radius);
-  background: var(--card-bg);
-  border: 1px solid var(--line);
-  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
+  position: relative;
+  height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--card-bg);
   overflow: hidden;
 }
 
 .frame img {
-  width: 100%;
   height: 100%;
-  object-fit: cover; /* fills the frame edge-to-edge — crops non-square photos */
+  width: auto;
   display: block;
 }
 
-/* ==========================================================
-   CTA — pill button, fills with the accent color on hover
-   ========================================================== */
-.cta {
+.footer {
   flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 2vh, 20px);
+  margin-bottom: clamp(20px, 6vh, 80px);
+}
+
+.cta {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
   font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: 0.68rem;
+  font-weight: 700;
+  font-size: 0.75rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-ink);
+  background: var(--accent);
   text-decoration: none;
-  padding: 8px 18px;
-  border: 1px solid var(--accent);
+  padding: 10px 22px;
   border-radius: var(--radius-sm);
-  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .cta:hover {
-  background: var(--accent);
-  color: var(--accent-ink);
+  opacity: 0.9;
   transform: translateY(-1px);
 }
 
@@ -183,13 +157,17 @@ body {
   outline-offset: 4px;
 }
 
-/* ==========================================================
-   Small / short screens — stay full-page (no stacking, that
-   would need scroll). Just tighten spacing and drop the
-   caption if there truly isn't room, so nothing gets clipped.
-   ========================================================== */
 @media (max-height: 480px), (max-width: 380px) {
-  .caption {
+  .subtitle {
     display: none;
+  }
+}
+
+/* Narrow phones: the one-line rule above stops being readable at this
+   width, so let it wrap to 2 lines instead of truncating with "…". */
+@media (max-width: 520px) {
+  .subtitle {
+    white-space: normal;
+    text-overflow: clip;
   }
 }
