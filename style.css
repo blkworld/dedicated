@@ -79,6 +79,7 @@ body {
 .subtitle {
   margin: 0;
   max-width: min(94vw, 760px);
+  font-family: "Iosevka Charon Mono", monospace;
   font-size: clamp(0.65rem, 1.4vh, 0.85rem);
   line-height: 1.5;
   color: var(--ink);
