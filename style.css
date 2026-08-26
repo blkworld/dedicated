@@ -92,6 +92,22 @@ body {
   color: var(--ink-dim);
 }
 
+.bio {
+  margin: 0;
+  max-width: min(90vw, 640px);
+  font-size: clamp(0.75rem, 1.7vh, 0.95rem);
+  line-height: 1.5;
+  color: var(--ink-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* keeps it to one line — long bios truncate with "…" */
+}
+
+.bio strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
 /* ==========================================================
    Gallery — rounded photo frames. Images never crop: they sit
    centered inside a fixed frame (object-fit: contain), so a
@@ -111,9 +127,8 @@ body {
 .card {
   margin: 0;
   min-height: 0;
+  min-width: 0; /* lets grid children shrink instead of stretching the column to fit content */
   display: flex;
-  flex-direction: column;
-  gap: clamp(10px, 1.5vh, 18px);
 }
 
 .frame {
@@ -134,22 +149,6 @@ body {
   height: 100%;
   object-fit: cover; /* fills the frame edge-to-edge — crops non-square photos */
   display: block;
-}
-
-.caption {
-  flex: 0 0 auto;
-  font-size: clamp(0.7rem, 1.5vh, 0.85rem);
-  line-height: 1.5;
-  color: var(--ink-dim);
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; /* keeps it to one line — long bios get truncated with "…" */
-}
-
-.caption strong {
-  color: var(--ink);
-  font-weight: 700;
 }
 
 /* ==========================================================
