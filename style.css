@@ -5,14 +5,14 @@
   --bg: #0a0a0a;
   --ink: #f5f5f2;
   --ink-dim: #94948c;
-  --accent: #f5f5f2;
+  --accent: #d6ff3f;
   --accent-ink: #0a0a0a;
   --line: #262622;
   --card-bg: #141412;
   --radius-sm: 999px;
 
   --font-display: "Iosevka Charon", sans-serif;
-  --font-mono: "Iosevka Charon", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --gutter: clamp(20px, 5vw, 80px);
 }
@@ -158,5 +158,14 @@ body {
 @media (max-height: 480px), (max-width: 380px) {
   .subtitle {
     display: none;
+  }
+}
+
+/* Narrow phones: the one-line rule above stops being readable at this
+   width, so let it wrap to 2 lines instead of truncating with "…". */
+@media (max-width: 520px) {
+  .subtitle {
+    white-space: normal;
+    text-overflow: clip;
   }
 }
