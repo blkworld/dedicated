@@ -13,8 +13,8 @@ export const config = {
 export default function middleware(request) {
   const authHeader = request.headers.get('authorization');
 
-  const validUser = process.env.SITE_USER;
-  const validPass = process.env.SITE_PASSWORD;
+  const validUser = process.env.locked;
+  const validPass = process.env.locked;
 
   if (authHeader) {
     const [scheme, encoded] = authHeader.split(' ');
