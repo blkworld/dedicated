@@ -84,17 +84,6 @@ body {
   margin: 0;
 }
 
-/* Signature element — a precise rule under the name, exactly as wide
-   as the type block above it, tying the accent color to the identity
-   without needing decoration anywhere else on the page. */
-.rule {
-  display: block;
-  width: clamp(48px, 8vw, 96px);
-  height: 3px;
-  background: var(--accent);
-  border-radius: var(--radius-pill);
-}
-
 .subtitle {
   margin: 0;
   max-width: min(90vw, 640px);
