@@ -107,7 +107,7 @@ body {
   display: flex;
   justify-content: flex-start; /* center() would clip start-side overflow and make it unreachable by scroll — flex-start avoids that entirely */
   align-items: stretch;
-  gap: clamp(12px, 2.2vw, 28px);
+  gap: clamp(12px, 2.2vw, 2px);
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -126,7 +126,7 @@ body {
 
 @media (max-width: 600px) {
   .gallery {
-    height: clamp(140px, 26vh, 260px);
+    height: clamp(220px, 38vh, 420px);
   }
 }
 
