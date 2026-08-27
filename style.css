@@ -126,7 +126,7 @@ body {
 
 @media (max-width: 600px) {
   .gallery {
-    height: clamp(220px, 38vh, 420px);
+    height: clamp(140px, 26vh, 260px);
   }
 }
 
