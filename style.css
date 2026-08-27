@@ -47,8 +47,8 @@ body {
 
 /* ==========================================================
    Page shell — three fixed regions, locked to the viewport.
-   The gallery is the only region allowed to scroll, and only
-   vertically, and only if the collage is taller than its box.
+   Nothing scrolls except the image row, and only if it has
+   more content than fits the screen width.
    ========================================================== */
 .page {
   height: 100vh;   /* universal fallback for browsers without dvh/svh support */
@@ -94,38 +94,30 @@ body {
 }
 
 /* ==========================================================
-   Gallery — a wrapped photo collage instead of a single
-   horizontally-scrolling strip. Every image keeps its own
-   native aspect ratio (height is capped, width is automatic,
-   nothing is cropped or stretched); images simply wrap onto
-   as many rows as they need. If the collage ends up taller
-   than the box, the box itself scrolls vertically — the rest
-   of the page (hero, footer) stays fixed and untouched.
+   Gallery — flat, no wrapper nesting. Every image shares the
+   same height; width is automatic based on its own aspect
+   ratio. flex-shrink:0 guarantees the full image always
+   renders — if it doesn't fit the screen, the row scrolls
+   instead of anything being cropped.
    ========================================================== */
 .gallery {
-  flex: 1 1 auto;
-  min-height: 0; /* required so a flex child can actually scroll instead of overflowing */
-  width: 100%;
+  flex: 0 0 auto;
+  height: clamp(300px, 56vh, 620px);
   max-width: 100%;
-
   display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-  justify-content: center;
-  gap: clamp(10px, 1.6vw, 18px);
-
-  overflow-x: hidden;
-  overflow-y: auto;
+  justify-content: flex-start; /* center() would clip start-side overflow and make it unreachable by scroll — flex-start avoids that entirely */
+  align-items: stretch;
+  gap: clamp(12px, 2.2vw, 2px);
+  overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 
   margin: auto 0;
-  padding: 4px; /* keeps box-shadows from getting clipped at the scroll edge */
 }
 
 .gallery .photo {
-  height: clamp(260px, 46vh, 520px);
+  height: 100%;
   width: auto;
-  max-width: 100%;
   flex-shrink: 0;
   display: block;
   background: var(--surface);
@@ -135,8 +127,8 @@ body {
 }
 
 @media (max-width: 600px) {
-  .gallery .photo {
-    height: clamp(200px, 38vh, 340px);
+  .gallery {
+    height: clamp(220px, 38vh, 420px);
   }
 }
 
