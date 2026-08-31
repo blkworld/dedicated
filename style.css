@@ -14,16 +14,11 @@
 
   --font: "Inter", -apple-system, sans-serif;
 
-  --gutter: clamp(20px, 5vw, 80px);
+  --gutter: clamp(20px, 5vw, 72px);
 }
 
 * {
   box-sizing: border-box;
-}
-
-html, body {
-  height: 100%;
-  overflow: hidden; /* no-scroll page: content is sized to always fit the viewport */
 }
 
 html {
@@ -46,31 +41,15 @@ body {
 }
 
 /* ==========================================================
-   Page shell — three fixed regions, locked to the viewport.
-   Nothing scrolls except the image row, and only if it has
-   more content than fits the screen width.
-   ========================================================== */
-.page {
-  height: 100vh;   /* universal fallback for browsers without dvh/svh support */
-  height: 100dvh;
-  height: 100svh;
-  padding: clamp(24px, 5vh, 64px) var(--gutter);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: clamp(16px, 3vh, 40px);
-}
-
-/* ==========================================================
-   Hero
+   Hero — a plain intro strip, not locked to the viewport.
+   The page now scrolls normally: a growing gallery needs that.
    ========================================================== */
 .hero {
-  flex: 0 0 auto;
+  padding: clamp(48px, 10vh, 96px) var(--gutter) clamp(32px, 6vh, 56px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(2px, 0.6vh, 6px);
+  gap: 14px;
   text-align: center;
 }
 
@@ -78,7 +57,7 @@ body {
   font-family: var(--font);
   font-weight: 800;
   letter-spacing: -0.03em;
-  font-size: clamp(2.25rem, 8.5vh, 5.25rem);
+  font-size: clamp(2.25rem, 7vw, 4.5rem);
   line-height: 1;
   color: var(--ink);
   margin: 0;
@@ -86,91 +65,28 @@ body {
 
 .subtitle {
   margin: 0;
-  max-width: min(90vw, 640px);
-  font-size: clamp(0.85rem, 1.8vh, 1.05rem);
+  font-size: clamp(0.9rem, 1.6vw, 1.05rem);
   font-weight: 500;
-  line-height: 1.5;
   color: var(--ink-dim);
 }
 
-/* ==========================================================
-   Gallery — flat, no wrapper nesting. Every image shares the
-   same height; width is automatic based on its own aspect
-   ratio. flex-shrink:0 guarantees the full image always
-   renders — if it doesn't fit the screen, the row scrolls
-   instead of anything being cropped.
-   ========================================================== */
-.gallery {
-  flex: 0 0 auto;
-  height: clamp(300px, 56vh, 620px);
-  max-width: 100%;
-  display: flex;
-  justify-content: flex-start; /* center() would clip start-side overflow and make it unreachable by scroll — flex-start avoids that entirely */
-  align-items: stretch;
-  gap: clamp(12px, 2.2vw, 2px);
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-
-  margin: auto 0;
-}
-
-.gallery .photo {
-  height: 100%;
-  width: auto;
-  flex-shrink: 0;
-  display: block;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.55);
-}
-
-@media (max-width: 600px) {
-  .gallery {
-    height: clamp(220px, 38vh, 420px);
-  }
-}
-
-/* ==========================================================
-   Footer / CTA
-   ========================================================== */
-.footer {
-  flex: 0 0 auto;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 0;
-}
-
 .cta {
+  margin-top: 8px;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-family: var(--font);
   font-weight: 600;
   font-size: 0.85rem;
   letter-spacing: -0.01em;
   color: var(--accent-ink);
   background: var(--accent);
   text-decoration: none;
-  padding: 12px 22px;
+  padding: 11px 22px;
   border-radius: var(--radius-pill);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.cta-icon {
-  width: 14px;
-  height: 14px;
   transition: transform 0.15s ease;
 }
 
 .cta:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px -10px rgba(214, 255, 63, 0.45);
-}
-
-.cta:hover .cta-icon {
-  transform: translate(1px, -1px);
 }
 
 .cta:focus-visible {
@@ -179,10 +95,69 @@ body {
 }
 
 /* ==========================================================
-   Small / short screens
+   Work grid — plain responsive gallery. Every tile is the same
+   portrait shape; images crop to fit so mismatched source sizes
+   never break the rhythm. Add more pieces by adding more tiles —
+   the grid re-flows on its own, no layout math required.
    ========================================================== */
-@media (max-height: 480px), (max-width: 380px) {
-  .subtitle {
-    display: none;
-  }
+.work {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--gutter) clamp(48px, 8vh, 96px);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: clamp(10px, 1.4vw, 18px);
+}
+
+.tile {
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.15s ease;
+}
+
+.tile:hover img {
+  opacity: 0.9;
+}
+
+.tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ==========================================================
+   Footer
+   ========================================================== */
+.site-footer {
+  padding: 0 var(--gutter) clamp(40px, 8vh, 72px);
+  display: flex;
+  justify-content: center;
+}
+
+.socials {
+  display: flex;
+  gap: clamp(18px, 3vw, 32px);
+}
+
+.socials a {
+  color: var(--ink-dim);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.socials a:hover,
+.socials a:focus-visible {
+  color: var(--ink);
 }
