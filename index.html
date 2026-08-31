@@ -1,1 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Devita Octa • My Personal Site</title>
+  <meta name="description" content="Hi, I'm Devita Octa — skills in SQL, Linux, Python, Power Query, Power Pivot, Canva, Photoshop, and video editing, plus communication skills.">
+  <meta name="author" content="Devita Octa">
+
+  <link rel="canonical" href="https://devitaocta.com/">
+
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="Devita Octa • Personal Site">
+  <meta property="og:description" content="Devita Octa • personal website, portfolio, and links.">
+  <meta property="og:image" content="https://devitaocta.com/images/devita-octa-portrait.jpg">
+  <meta property="og:url" content="https://devitaocta.com/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Devita Octa • Personal Site">
+  <meta name="twitter:description" content="Devita Octa • official website, portfolio, and links.">
+  <meta name="twitter:image" content="https://devitaocta.com/images/devita-octa-portrait.jpg">
+
+  <link rel="icon" type="image/png" href="/icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!--
+    NOTE on jobTitle below: schema.org expects an occupation here
+    (e.g. "Data Analyst"), not a name + academic credentials. Right
+    now it holds "Devita Octa Viani, S.AP., S.M." — Google may just
+    ignore this field as-is. Replace it with your actual role/title,
+    or remove the "jobTitle" line entirely if it doesn't apply.
+  -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Devita Octa",
+    "url": "https://devitaocta.com/",
+    "image": "https://devitaocta.com/images/devita-octa-portrait.jpg",
+    "jobTitle": "Devita Octa Viani, S.AP., S.M.",
+    "description": "Hi, I'm Devita Octa, and I have skills in SQL, Linux, Python, PowerQuery, PowerPivot, Canva, Photoshop, and video editing as well as communication skills.",
+    "sameAs": [
+      "https://www.instagram.com/devita.octa",
+      "https://id.linkedin.com/in/devita-octa-viani",
+      "https://twitter.com/dibawahumurrr"
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <main class="page">
+    <div class="hero">
+      <h1 class="name">Devita Octa</h1>
+      <p class="subtitle">Hi, I'm Devita Octa, just sharing my other side you don't see anywhere else.</p>
+    </div>
+
+    <!--
+      Gallery — every image shares the same height; width is automatic
+      based on each photo's own aspect ratio, nothing gets cropped.
+      If the images together are wider than the screen, this row
+      scrolls sideways — swipe/drag left-right to see the rest.
+      To add a 3rd photo, copy one whole <img class="photo" ...> tag.
+    -->
+    <section class="gallery" aria-label="Photos of Devita Octa">
+      <img
+        class="photo"
+        src="images/devita-octa-portrait.jpg"
+        alt="Devita Octa, Portrait Photo"
+        loading="eager">
+      <img
+        class="photo"
+        src="images/devita-octa-photo.jpg"
+        alt="Devita Octa, LinkedIn Photo"
+        loading="lazy">
+      <img
+        class="photo"
+        src="images/devita-octa-selfie.jpg"
+        alt="Devita Octa, Selfie Photo"
+        loading="lazy">
+      <img
+        class="photo"
+        src="images/devita-octa-glasses.jpg"
+        alt="Devita Octa, Wearing Glasses"
+        loading="lazy">
+    </section>
+
+    <div class="footer">
+      <!--
+        FIX: this button previously had href="null" — it went nowhere.
+        Pointed it at your real Instagram since that's what it's labeled.
+        Change the href/label together if you want it to point elsewhere.
+      -->
+      <a class="cta" href="https://www.1024tera.com/sharing/link?surl=9tHdS34b6VxQ2ZEmqMFfMA" target="_blank" rel="noopener">
+        Check My Link
+        <svg class="cta-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 12L12 4M12 4H6M12 4V10"/>
+        </svg>
+      </a>
+    </div>
+  </main>
+
+</body>
+</html>
