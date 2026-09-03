@@ -1,1 +1,0 @@
-# Devita Octa Personal Site
