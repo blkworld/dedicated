@@ -1,11 +1,10 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title></title>
+<title>Devita Octa — Personal Site</title>
 <meta name="description" content="Hi, I'm Devita Octa — skills in SQL, Linux, Python, Power Query, Power Pivot, Canva, Photoshop, and video editing, plus communication skills.">
 <meta name="author" content="Devita Octa">
 <meta name="robots" content="index, follow">
@@ -45,7 +44,7 @@
      just ignore the field. -->
 
 <link rel="icon" type="image/png" href="/icon.png">
-<meta name="theme-color" content="#FFFFFF">
+<meta name="theme-color" content="#AFAFAF">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,202 +53,12 @@
 </head>
 <body>
 
-<header class="topbar">
-  <div class="identity">
-    <p class="eyebrow">Personal site</p>
-    <h1>Devita Octa<span class="accent-dot">.</span></h1>
-    <p class="subtitle">Hi, I'm Devita Octa, just sharing my other side you don't see anywhere else.</p>
-  </div>
-</header>
-
-<main class="gallery-wrap">
-<h2 class="sr-only">Photos of Devita Octa</h2>
-
-<button class="gallery-arrow gallery-arrow--prev" id="gallery-prev" type="button" aria-label="Scroll to previous photos" hidden>
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-</button>
 <script>
-  // Infinite-loop gallery.
-  //
-  // How the loop works: if the real photos already fit inside the viewport,
-  // we just center them and skip the scroller entirely (same as before).
-  // Otherwise we clone the whole set once before the real photos and once
-  // after them, so the strip reads: [clone][real][clone]. The visible
-  // scroller always starts positioned at the start of the middle ("real")
-  // copy. As soon as the scroll position drifts into a clone region, we
-  // silently shift scrollLeft by exactly one real-set-width in the
-  // opposite direction. Because the clone is pixel-identical to the real
-  // set at that same relative offset, this correction is invisible — the
-  // user just keeps scrolling and the strip appears to loop forever, in
-  // both directions, with no snap-back or dead end.
-  (function () {
-    const gallery = document.getElementById('gallery');
-    const prevBtn = document.getElementById('gallery-prev');
-    const nextBtn = document.getElementById('gallery-next');
-    if (!gallery || !prevBtn || !nextBtn) return;
-
-    const originals = Array.from(gallery.querySelectorAll('figure'));
-    if (originals.length === 0) return;
-
-    let looping = false;
-    let realWidth = 0;
-    let correcting = false;
-    let setupHandle = null;
-    let lastWidth = 0;
-
-    function gapPx() {
-      const style = getComputedStyle(gallery);
-      return parseFloat(style.columnGap || style.gap || '0') || 0;
-    }
-
-    function measureRealWidth() {
-      const gap = gapPx();
-      return originals.reduce((sum, fig) => sum + fig.getBoundingClientRect().width + gap, 0);
-    }
-
-    function cloneSet(markerAttr) {
-      const frag = document.createDocumentFragment();
-      originals.forEach((fig) => {
-        const clone = fig.cloneNode(true);
-        clone.setAttribute('data-clone', 'true');
-        clone.setAttribute('aria-hidden', 'true');
-        clone.querySelectorAll('img').forEach((img) => {
-          img.loading = 'lazy';
-          img.removeAttribute('fetchpriority');
-        });
-        frag.appendChild(clone);
-      });
-      return frag;
-    }
-
-    function clearClones() {
-      gallery.querySelectorAll('[data-clone="true"]').forEach((el) => el.remove());
-    }
-
-    function updateArrowVisibility() {
-      prevBtn.hidden = !looping;
-      nextBtn.hidden = !looping;
-      prevBtn.disabled = false;
-      nextBtn.disabled = false;
-    }
-
-    function setup() {
-      lastWidth = gallery.clientWidth;
-      clearClones();
-      gallery.classList.remove('has-overflow');
-      gallery.scrollLeft = 0;
-
-      const fits = gallery.scrollWidth <= gallery.clientWidth + 1;
-
-      if (fits) {
-        looping = false;
-        updateArrowVisibility();
-        return;
-      }
-
-      looping = true;
-      gallery.classList.add('has-overflow');
-
-      realWidth = measureRealWidth();
-
-      gallery.insertBefore(cloneSet('head'), gallery.firstChild);
-      gallery.appendChild(cloneSet('tail'));
-
-      // Land exactly at the start of the real (middle) copy, instantly —
-      // no animation, so the very first paint already looks correct.
-      gallery.scrollLeft = realWidth;
-
-      updateArrowVisibility();
-    }
-
-    function correctLoopPosition() {
-      if (!looping || correcting || realWidth <= 0) return;
-      correcting = true;
-      // requestAnimationFrame instead of an inline write: on WebKit, writing
-      // scrollLeft synchronously inside the 'scroll' handler while the
-      // gesture still has momentum can make it re-target its own inertial
-      // scroll toward the *pre-jump* position (i.e. snap back toward the
-      // start). Deferring the write one frame lets the browser finish
-      // processing this scroll tick first, so the correction actually sticks.
-      //
-      // Note: this write must land while the gallery has no CSS
-      // `scroll-behavior: smooth` set, or the browser will animate it
-      // instead of applying it instantly — which is what made the strip
-      // look like it was auto-scrolling on its own.
-      requestAnimationFrame(() => {
-        if (gallery.scrollLeft < realWidth) {
-          gallery.scrollLeft += realWidth;
-        } else if (gallery.scrollLeft >= realWidth * 2) {
-          gallery.scrollLeft -= realWidth;
-        }
-        correcting = false;
-      });
-    }
-
-    function scrollByAmount(direction) {
-      const tile = gallery.querySelector('figure');
-      const tileWidth = tile ? tile.getBoundingClientRect().width + gapPx() : 300;
-      gallery.scrollBy({ left: direction * tileWidth, behavior: 'smooth' });
-    }
-
-    prevBtn.addEventListener('click', () => scrollByAmount(-1));
-    nextBtn.addEventListener('click', () => scrollByAmount(1));
-
-    gallery.addEventListener('scroll', correctLoopPosition, { passive: true });
-
-    window.addEventListener('load', setup);
-
-    // Watch the gallery's own width, not window resize. Mobile browsers
-    // fire 'resize' when the address bar collapses/expands from scrolling
-    // itself — reacting to that was rebuilding the clones and resetting
-    // scrollLeft to the start mid-scroll, which is what looked like the
-    // loop "snapping back to the first image". A width-only observer
-    // ignores those address-bar-driven height changes entirely.
-    if ('ResizeObserver' in window) {
-      const observer = new ResizeObserver(() => {
-        const width = gallery.clientWidth;
-        if (Math.abs(width - lastWidth) < 2) return;
-        clearTimeout(setupHandle);
-        setupHandle = setTimeout(setup, 150);
-      });
-      observer.observe(gallery);
-    } else {
-      // Fallback for older browsers: same idea, just window-driven.
-      window.addEventListener('resize', () => {
-        const width = gallery.clientWidth;
-        if (Math.abs(width - lastWidth) < 2) return;
-        clearTimeout(setupHandle);
-        setupHandle = setTimeout(setup, 150);
-      });
-    }
-
-    // Re-run once a lazily-loaded image finishes, in case it changes the
-    // real content's width enough to flip fits/overflow.
-    gallery.querySelectorAll('img').forEach((img) => {
-      if (img.complete) return;
-      img.addEventListener('load', () => {
-        clearTimeout(setupHandle);
-        setupHandle = setTimeout(setup, 100);
-      }, { once: true });
-    });
-
-    setup();
-  })();
-</script>
-
-<script>
-  // Deters casual right-click "save image"/"inspect" and copy-paste.
-  // This is NOT real protection — view-source, disabling JS, browser
-  // reader mode, or a screenshot all bypass it instantly. It only stops
-  // the average visitor from casually right-clicking or selecting text.
+  // Same deterrent-only protection as before — not real security, just
+  // stops the average visitor from right-clicking or selecting text.
   document.addEventListener('contextmenu', (e) => e.preventDefault());
   document.addEventListener('copy', (e) => e.preventDefault());
-  document.querySelectorAll('img').forEach((img) => {
-    img.setAttribute('draggable', 'false');
-  });
 </script>
+
 </body>
 </html>
-=======
-
->>>>>>> dfda9742da8cf123dd0f2f7f523414ed4f415afd
