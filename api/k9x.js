@@ -9,7 +9,8 @@ module.exports = async (req, res) => {
   try {
     city = decodeURIComponent(req.headers["x-vercel-ip-city"] || "?");
   } catch (e) {}
-  console.log("visit", p, ip, country, region, city);
+  const ua = (req.headers["user-agent"] || "").slice(0, 80);
+  console.log("visit", p, ip, country, region, city, ua);
 
   if (!["view", "event", "session"].includes(p)) {
     return res.status(404).end();
