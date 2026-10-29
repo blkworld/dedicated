@@ -1,7 +1,16 @@
 module.exports = async (req, res) => {
   const p = String(req.query.p || "");
-  const ip = (req.headers["x-forwarded-for"] || "").split(",")[0].trim();
-  console.log("visit", p, ip);
+  const ip =
+    req.headers["x-real-ip"] ||
+    (req.headers["x-forwarded-for"] || "").split(",")[0].trim();
+  const country = req.headers["x-vercel-ip-country"] || "?";
+  const region = req.headers["x-vercel-ip-country-region"] || "?";
+  let city = "?";
+  try {
+    city = decodeURIComponent(req.headers["x-vercel-ip-city"] || "?");
+  } catch (e) {}
+  console.log("visit", p, ip, country, region, city);
+
   if (!["view", "event", "session"].includes(p)) {
     return res.status(404).end();
   }
