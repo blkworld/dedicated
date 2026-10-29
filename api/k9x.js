@@ -1,5 +1,7 @@
 module.exports = async (req, res) => {
   const p = String(req.query.p || "");
+  const ip = (req.headers["x-forwarded-for"] || "").split(",")[0].trim();
+  console.log("visit", p, ip);
   if (!["view", "event", "session"].includes(p)) {
     return res.status(404).end();
   }
