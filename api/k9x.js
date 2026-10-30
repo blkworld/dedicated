@@ -1,5 +1,12 @@
+const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+
 module.exports = async (req, res) => {
   const p = String(req.query.p || "");
+  if (!["view", "event", "session"].includes(p)) {
+    return res.status(404).end();
+  }
+
   const ip =
     req.headers["x-real-ip"] ||
     (req.headers["x-forwarded-for"] || "").split(",")[0].trim();
@@ -9,11 +16,20 @@ module.exports = async (req, res) => {
   try {
     city = decodeURIComponent(req.headers["x-vercel-ip-city"] || "?");
   } catch (e) {}
-  const ua = (req.headers["user-agent"] || "").slice(0, 80);
-  console.log("visit", p, ip, country, region, city, ua);
+  const ua = req.headers["user-agent"] || "";
 
-  if (!["view", "event", "session"].includes(p)) {
-    return res.status(404).end();
+  if (p === "view" && REDIS_URL) {
+    try {
+      await fetch(REDIS_URL, {
+        method: "POST",
+        headers: { Authorization: "Bearer " + REDIS_TOKEN },
+        body: JSON.stringify([
+          "LPUSH",
+          "visits",
+          JSON.stringify({ t: Date.now(), ip, country, region, city, ua }),
+        ]),
+      });
+    } catch (e) {}
   }
 
   const body =
