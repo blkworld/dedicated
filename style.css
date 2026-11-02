@@ -115,7 +115,7 @@ body {
 .gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: 5px;
 }
 @media (min-width: 640px) {
   .gallery { grid-template-columns: repeat(4, 1fr); }
@@ -124,7 +124,7 @@ body {
 .thumb {
   padding: 0;
   border: 0;
-  border-radius: 14px;
+  border-radius: 0px;
   overflow: hidden;
   aspect-ratio: 4 / 5;
   background: var(--tile);
@@ -154,7 +154,7 @@ body {
   display: block;
   max-width: min(92vw, 720px);
   max-height: 86vh;
-  border-radius: 14px;
+  border-radius: 0px;
 }
 .lightbox button {
   position: absolute;

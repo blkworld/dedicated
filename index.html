@@ -13,12 +13,15 @@
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Devita Octa • Links">
 <meta property="og:description" content="Devita Octa • personal website, portfolio, and links.">
-<meta property="og:image" content="https://devitaocta.com/images/devita-octa-portrait.jpg">
+<meta property="og:image" content="https://devitaocta.com/assets/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Devita Octa">
 <meta property="og:url" content="https://devitaocta.com/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Devita Octa • Links">
 <meta name="twitter:description" content="Devita Octa • official website, portfolio, and links.">
-<meta name="twitter:image" content="https://devitaocta.com/images/devita-octa-portrait.jpg">
+<meta name="twitter:image" content="https://devitaocta.com/assets/og-cover.jpg">
 
 <script type="application/ld+json">
 {
@@ -103,7 +106,7 @@
   // Order here = order on the page.
   var SOCIALS = [
       { id: 'instagram',  name: 'Instagram',  on: true , url: 'https://www.instagram.com/devita.octa' },
-      { id: 'tiktok',     name: 'TikTok',     on: true , url: 'https://www.tiktok.com/@devita.octa' },
+      { id: 'tiktok',     name: 'TikTok',     on: true , url: 'https://www.tiktok.com/@fruitycoldbreww' },
       { id: 'youtube',    name: 'YouTube',    on: false, url: '' },
       { id: 'x',          name: 'X',          on: true , url: 'https://twitter.com/dibawahumurrr' },
       { id: 'facebook',   name: 'Facebook',   on: false, url: '' },
@@ -151,14 +154,7 @@
 
 
   <section class="gallery" aria-label="Photos of Devita Octa">
-    <button class="thumb" type="button"><img src="images/devita-octa-portrait.jpg" alt="Portrait of Devita Octa" width="800" height="1000" loading="lazy"></button>
-    <button class="thumb" type="button"><img src="images/devita-octa-cooking.jpg" alt="Devita Octa cooking" width="800" height="1000" loading="lazy"></button>
-    <button class="thumb" type="button"><img src="images/devita-octa-photo.jpg" alt="Devita Octa, profile photo" width="800" height="1000" loading="lazy"></button>
-    <button class="thumb" type="button"><img src="images/devita-octa-selfie.jpg" alt="Selfie of Devita Octa" width="800" height="1000" loading="lazy"></button>
-    <button class="thumb" type="button"><img src="images/devita-octa-glasses.jpg" alt="Devita Octa wearing glasses" width="800" height="1000" loading="lazy"></button>
-    <button class="thumb" type="button"><img src="images/devita-octa-formal.jpg" alt="Devita Octa in formal wear" width="800" height="1000" loading="lazy"></button>
-    <button class="thumb" type="button"><img src="images/devita-octa-running.jpg" alt="Devita Octa running" width="800" height="1000" loading="lazy"></button>
-    <button class="thumb" type="button"><img src="images/devita-octa-bottle.jpg" alt="Devita Octa holding a bottle" width="800" height="1000" loading="lazy"></button>
+    <!-- Filled automatically from images.json -->
   </section>
 </main>
 
@@ -170,6 +166,24 @@
 <script>
   (function () {
     var gallery = document.querySelector('.gallery');
+
+    // Build the grid from images.json (created by generate-gallery.js)
+    fetch('images.json', { cache: 'no-cache' })
+      .then(function (r) { return r.json(); })
+      .then(function (list) {
+        list.forEach(function (p) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'thumb';
+          var i = document.createElement('img');
+          i.src = p.src;
+          i.alt = p.alt || '';
+          i.loading = 'lazy';
+          b.appendChild(i);
+          gallery.appendChild(b);
+        });
+      })
+      .catch(function () { console.warn('Could not load images.json'); });
     var box = document.getElementById('lightbox');
     var boxImg = document.getElementById('lightbox-img');
 

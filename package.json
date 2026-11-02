@@ -2,9 +2,10 @@
   "name": "my-name-site",
   "private": true,
   "version": "1.0.0",
-  "description": "Personal landing page — plain static HTML/CSS, no build step needed for production.",
+  "description": "Personal landing page — plain static HTML/CSS.",
   "scripts": {
-    "dev": "live-server --port=3000 --no-css-inject"
+    "dev": "node dev.js",
+    "build": "node generate-gallery.js"
   },
   "devDependencies": {
     "live-server": "^1.2.2"

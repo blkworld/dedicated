@@ -1,5 +1,5 @@
 {
-  "rewrites": [
-    { "source": "/k9x/:path*", "destination": "/api/k9x?p=:path*" }
-  ]
+  "framework": null,
+  "buildCommand": "node generate-gallery.js",
+  "outputDirectory": "."
 }
