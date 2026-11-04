@@ -1,5 +1,9 @@
 {
   "framework": null,
   "buildCommand": "node generate-gallery.js",
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/k9x", "destination": "/api/k9x" },
+    { "source": "/k9x/:p", "destination": "/api/k9x?p=:p" }
+  ]
 }
