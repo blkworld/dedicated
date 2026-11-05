@@ -268,7 +268,7 @@ body::after {
   white-space: pre;
   overflow: hidden;
   opacity: 1;
-  color: #008000;
+  color: #00ff00;
   font-family: "Segoe UI Symbol", "DejaVu Sans Mono", "Apple Braille", monospace;
   font-size: clamp(3px, 1.5vw, 9px);
   line-height: 1.1;
