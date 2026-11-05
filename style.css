@@ -178,10 +178,10 @@ body {
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
 }
-/* Sembunyikan seluruh isi website, termasuk foto */
+/* hidden CSS */
 html,
 body {
-  background: #0F0F11 !important;
+  background: #000000 !important;
   min-height: 100vh;
 }
 
