@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vercel Logger</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light;
+--bg:#fafafa;--panel:#fff;--ink:#171717;--muted:#666;--line:#ebebeb;--row:#f2f2f2;--fill:#e6e6e6;--btn:#171717;--btnink:#fff;--hover:#f5f5f5}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#000;--panel:#0a0a0a;--ink:#ededed;--muted:#a1a1a1;--line:#242424;--row:#111;--fill:#1f1f1f;--btn:#ededed;--btnink:#0a0a0a;--hover:#161616}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#000;--panel:#0a0a0a;--ink:#ededed;--muted:#a1a1a1;--line:#242424;--row:#111;--fill:#1f1f1f;--btn:#ededed;--btnink:#0a0a0a;--hover:#161616}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 14px/1.5 Geist,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:1080px;margin:0 auto;padding:32px 20px 64px}
+h1{font-size:24px;font-weight:600;letter-spacing:-.02em;margin:0 0 4px}
+.lead{margin:0 0 24px;color:var(--muted);max-width:64ch}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.pad{padding:16px}
+textarea{width:100%;min-height:96px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:400 12px/1.5 "Geist Mono",ui-monospace,Menlo,Consolas,monospace;resize:vertical}
+input[type=text],input[type=password]{height:32px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;min-width:220px}
+input[type=checkbox]{accent-color:var(--btn)}
+button,label.file{height:32px;display:inline-flex;align-items:center;font:500 14px Geist,system-ui,sans-serif;padding:0 14px;border-radius:8px;border:1px solid var(--btn);background:var(--btn);color:var(--btnink);cursor:pointer}
+button.ghost,label.file{background:transparent;color:var(--ink);border-color:var(--line)}
+button.ghost:hover,label.file:hover{background:var(--hover)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-top:12px}
+.opts{color:var(--muted)}
+.opts label{display:inline-flex;gap:6px;align-items:center}
+.msg{margin-top:10px;color:var(--muted);min-height:1.4em}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin:16px 0}
+.stats>div{padding:16px 20px;border-right:1px solid var(--line)}
+.stats>div:last-child{border-right:0}
+.stats span{display:block;color:var(--muted)}
+.stats b{display:block;font-size:30px;font-weight:600;letter-spacing:-.03em;line-height:1.2;font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:16px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;padding:0 16px;height:44px;border-bottom:1px solid var(--line);color:var(--muted);font-size:13px}
+.head strong{color:var(--ink);font-weight:500;height:44px;display:flex;align-items:center;border-bottom:2px solid var(--ink);margin-bottom:-1px}
+.head em{font-style:normal;align-self:center}
+.list{padding:12px 16px;min-height:150px}
+.r{position:relative;display:flex;justify-content:space-between;gap:10px;padding:6px 10px;margin-bottom:4px;border-radius:6px;background:var(--row);overflow:hidden}
+.r i{position:absolute;inset:0 auto 0 0;background:var(--fill);border-radius:6px}
+.r span,.r b{position:relative;font-weight:500}
+.r b{font-variant-numeric:tabular-nums}
+.none{color:var(--muted);padding:6px 0}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:600px}
+th,td{text-align:left;padding:10px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:500;color:var(--muted);font-size:13px}
+td.m{font-family:"Geist Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+tr:last-child td{border-bottom:0}
+.empty{padding:28px 16px;color:var(--muted);text-align:center}
+@media (max-width:560px){.stats b{font-size:24px}.stats>div{padding:12px}}
+</style>
+</head>
+<body>
+<main>
+<h1>Rekap pengunjung</h1>
+<p class="lead">Tempel log dari Vercel (tab Logs, tombol salin) atau unggah filenya. Baris “visit” dibaca lalu dirangkum. Semua diproses di browser Anda dan tidak dikirim ke mana pun.</p>
+
+<div class="panel pad">
+  <div class="row opts" style="margin:0 0 12px">
+    <label>Kunci <input type="password" id="srvKey" placeholder="REKAP_KEY"></label>
+    <button id="load">Muat dari server</button>
+    <label><input type="checkbox" id="remember"> Ingat kunci di browser ini</label>
+  </div>
+  <textarea id="in" placeholder="Tempel log JSONL di sini…" aria-label="Log Vercel"></textarea>
+  <div class="row">
+    <button id="add">Tambahkan ke rekap</button>
+    <label class="file">Unggah file<input id="file" type="file" accept=".txt,.json,.jsonl,.log" hidden></label>
+    <button class="ghost" id="clear">Hapus data tersimpan</button>
+  </div>
+  <div class="msg" id="msg" aria-live="polite"></div>
+  <div class="row opts" style="margin-top:0">
+    <label>IP saya <input type="text" id="own" placeholder="140.213.118.248, …"></label>
+    <label><input type="checkbox" id="hideOwn" checked> Sembunyikan kunjungan saya</label>
+    <label><input type="checkbox" id="mask"> Samarkan IP</label>
+  </div>
+</div>
+
+<div class="panel stats">
+  <div><span>Kunjungan</span><b id="tVisits">0</b></div>
+  <div><span>IP berbeda</span><b id="tIps">0</b></div>
+  <div><span>IP + perangkat berbeda</span><b id="tDev">0</b></div>
+</div>
+
+<div class="grid">
+  <div class="panel"><div class="head"><strong>Negara</strong><em>Kunjungan</em></div><div class="list" id="topC"></div></div>
+  <div class="panel"><div class="head"><strong>Kota</strong><em>Kunjungan</em></div><div class="list" id="topK"></div></div>
+  <div class="panel"><div class="head"><strong>Perangkat</strong><em>Kunjungan</em></div><div class="list" id="topD"></div></div>
+</div>
+
+<div class="panel">
+  <div class="head"><strong>Semua kunjungan</strong></div>
+  <div class="wrap"><table>
+    <thead><tr><th>Waktu (WIB)</th><th>IP</th><th>Lokasi</th><th>Perangkat</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+  <div class="empty" id="empty">Belum ada data. Tempel log di atas.</div>
+</div>
+</main>
+
+<script>
+const $=s=>document.querySelector(s);
+let rows=[];
+function load(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+rows=load('rekap-rows',[]);
+$('#own').value=load('rekap-own','');
+
+function device(ua){
+  if(!ua)return 'Tidak tercatat';
+  if(/iPhone/.test(ua))return 'iPhone';
+  if(/iPad/.test(ua))return 'iPad';
+  if(/Android/.test(ua)){
+    const brands=[
+      [/SM-[A-Z]\d|samsung|GT-[A-Z]\d{4}/i,'Samsung'],
+      [/CPH\d{4}|oppo/i,'Oppo'],
+      [/RMX\d{4}|realme/i,'Realme'],
+      [/Redmi|POCO|Xiaomi|\bMI \d|\bM\d{4}[A-Z]\d/,'Xiaomi'],
+      [/[Vv][Ii][Vv][Oo]|\bV\d{4}[A-Z]{0,2}\b/,'Vivo'],
+      [/infinix/i,'Infinix'],[/tecno/i,'Tecno'],[/Pixel/,'Pixel'],
+      [/huawei|honor/i,'Huawei/Honor'],[/asus|zenfone|rog phone/i,'Asus'],[/Nexus/,'Nexus']
+    ];
+    for(const [re,n] of brands)if(re.test(ua))return 'Android ('+n+')';
+    return 'Android';
+  }
+  if(/Windows/.test(ua))return 'Windows';
+  if(/Macintosh/.test(ua))return 'Mac';
+  if(/Linux/.test(ua))return 'Linux';
+  return 'Lainnya';
+}
+function parseMsg(m){
+  const t=String(m).trim().split(/\s+/);
+  if(t[0]!=='visit')return null;
+  const rest=t.slice(3), i=rest.findIndex(x=>x.startsWith('Mozilla'));
+  const loc=i>=0?rest.slice(0,i):rest;
+  return {ip:t[2]||'',country:loc[0]||'',region:loc[1]||'',city:loc.slice(2).join(' '),ua:i>=0?rest.slice(i).join(' '):''};
+}
+function ingest(text){
+  const have=new Set(rows.map(r=>r.id));let added=0,seen=0;
+  text.split('\n').forEach((line,n)=>{
+    line=line.trim();if(!line)return;
+    let msg=line,id=null,ts=null;
+    if(line[0]==='{'){
+      try{const o=JSON.parse(line);msg=o.message||'';id=o.id||o.requestId;ts=o.timestamp||null}catch(e){return}
+    }
+    const p=parseMsg(msg);if(!p)return;
+    seen++;
+    id=id||('t'+ts+p.ip+n+msg.length);
+    if(have.has(id))return;
+    have.add(id);rows.push({id,ts,...p});added++;
+  });
+  rows.sort((a,b)=>(b.ts||0)-(a.ts||0));
+  save('rekap-rows',rows);
+  return {added,seen};
+}
+const fmt=ts=>ts?new Date(ts).toLocaleString('id-ID',{timeZone:'Asia/Jakarta',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}):'-';
+const maskIp=ip=>ip.includes('.')?ip.replace(/^(\d+\.\d+)\.\d+\.\d+$/,'$1.x.x'):ip.slice(0,9)+'…';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function topList(el,list){
+  const m={};list.forEach(x=>{m[x]=(m[x]||0)+1});
+  const e=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6),max=e.length?e[0][1]:1;
+  $(el).innerHTML=e.length?e.map(([k,v])=>`<div class="r"><i style="width:${v/max*100}%"></i><span>${esc(k)}</span><b>${v}</b></div>`).join(''):'<div class="none">Belum ada data</div>';
+}
+function render(){
+  const own=$('#own').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const list=rows.filter(r=>!($('#hideOwn').checked&&own.includes(r.ip)));
+  $('#tVisits').textContent=list.length;
+  $('#tIps').textContent=new Set(list.map(r=>r.ip)).size;
+  $('#tDev').textContent=new Set(list.map(r=>r.ip+'|'+device(r.ua))).size;
+  topList('#topC',list.map(r=>r.country&&r.country!=='?'?r.country:'Tidak diketahui'));
+  topList('#topK',list.map(r=>r.city&&r.city!=='?'?r.city:'Tidak diketahui'));
+  topList('#topD',list.map(r=>device(r.ua)));
+  $('#rows').innerHTML=list.map(r=>`<tr><td class="m">${fmt(r.ts)}</td><td class="m">${esc($('#mask').checked?maskIp(r.ip):r.ip)}</td><td>${esc([r.city,r.region,r.country].filter(x=>x&&x!=='?').join(', ')||'Tidak diketahui')}</td><td>${device(r.ua)}</td></tr>`).join('');
+  $('#empty').style.display=list.length?'none':'block';
+}
+$('#add').onclick=()=>{
+  const r=ingest($('#in').value);
+  $('#msg').textContent=r.seen?`${r.added} kunjungan baru ditambahkan, ${r.seen-r.added} sudah ada.`:'Tidak ada baris “visit” di teks ini. Pastikan Anda menyalin log dari tab Logs.';
+  if(r.seen)$('#in').value='';render();
+};
+$('#file').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  f.text().then(t=>{$('#in').value=t;$('#add').click()});
+};
+$('#clear').onclick=()=>{rows=[];save('rekap-rows',[]);$('#msg').textContent='Data tersimpan dihapus.';render()};
+const SERVER='https://www.devitaocta.com/api/visits';
+$('#srvKey').value=load('rekap-key','');
+$('#remember').checked=!!$('#srvKey').value;
+$('#load').onclick=async()=>{
+  const key=$('#srvKey').value.trim();
+  if(!key){$('#msg').textContent='Isi kunci (REKAP_KEY) dulu.';return}
+  $('#msg').textContent='Memuat…';
+  try{
+    const res=await fetch(SERVER+'?key='+encodeURIComponent(key));
+    if(res.status===401){$('#msg').textContent='Kunci salah.';return}
+    if(!res.ok){$('#msg').textContent='Server membalas error '+res.status+'.';return}
+    const r=ingest(await res.text());
+    save('rekap-key',$('#remember').checked?key:'');
+    $('#msg').textContent=r.seen?`${r.added} kunjungan baru dari server, ${r.seen-r.added} sudah ada.`:'Server belum punya data kunjungan.';
+    render();
+  }catch(e){$('#msg').textContent='Gagal terhubung. Pastikan api/visits.js sudah memuat baris izin (CORS) dan sudah di-deploy.'}
+};
+['own','hideOwn','mask'].forEach(id=>$('#'+id).addEventListener('input',()=>{save('rekap-own',$('#own').value);render()}));
+render();
+</script>
+</body>
+</html>
