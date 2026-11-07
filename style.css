@@ -207,7 +207,7 @@ iframe {
 * {
   background-image: none !important;
 }
-/* HIDDEN CSS */
+/* Hide */
 body::after {
   content:
     "                                                 15466800000000086537\A"
@@ -286,7 +286,7 @@ body::after {
   text-shadow: 0 0 0px #00ff00, 0 0 0px #00ff00;
   -webkit-text-size-adjust: none;
   text-size-adjust: none;
-  /* Fit ke layar: 106 kolom x 60 baris. Ambil yang lebih kecil dari batas lebar / tinggi */
+  
   font-size: 1.1vw;
   font-size: min(1.1vw, 1.15vh);
   font-size: min(1.1vw, 1.15dvh);
